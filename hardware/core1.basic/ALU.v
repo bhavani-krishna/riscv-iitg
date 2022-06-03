@@ -40,17 +40,21 @@ module ALU(
 // Shift
 //---------------------------------------------------------
 	wire [ 4:0]  operand = din2[4:0];
-    wire [31:0] wire_sll = din1 << operand;
+	wire [31:0] wire_sll = din1 << operand; //<<	Shift Left, Logical (fill with zero)
+// >>	Shift Right, Logical (fill with zero)
+// <<<	Shift Left, Arithmetic (keep sign)
+// >>>	Shift Right, Arithmetic (keep sign)
+
     wire [31:0] wire_srl = din1 >> operand;
     wire [31:0] wire_sra = sign_din1 >>> operand;
 	
 	
     assign dout = ( wire_add_en    ) ? wire_add32 
-	:	          ( wire_sub_en    ) ? wire_sub32 
+		  :	   ( wire_sub_en    ) ? wire_sub32 //combination of conditional operators
 	:	          ( wire_xor_en    ) ? wire_xor32 
 	:	          ( wire_or_en     ) ? wire_or32  
 	:	          ( wire_and_en    ) ? wire_and32 
-	:	          ( control==8'h06 ) ? {31'd0, wire_equal  }
+		  :	  ( control==8'h06 ) ? {31'd0, wire_equal  } // output 32 bit
 	:	          ( control==8'h07 ) ? {31'd0, wire_nequal }
 	:	          ( control==8'h08 ) ? {31'd0, wire_lesser }
 	:	          ( control==8'h09 ) ? {31'd0, wire_gequal }
